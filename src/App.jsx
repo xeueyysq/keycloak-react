@@ -1,10 +1,12 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import useThemeStore from './store/themeStore';
+import keycloak from './keycloak';
 
 function App() {
   const darkMode = useThemeStore((state) => state.darkMode);
+  const [keycloakInitialized, setKeycloakInitialized] = useState(false);
 
   const theme = useMemo(
     () =>
@@ -15,6 +17,21 @@ function App() {
       }),
     [darkMode]
   );
+
+  useEffect(() => {
+    keycloak
+      .init({ onLoad: 'check-sso' })
+      .then((authenticated) => {
+        setKeycloakInitialized(true);
+      })
+      .catch((error) => {
+        console.error('Ошибка инициализации Keycloak:', error);
+      });
+  }, []);
+
+  if (!keycloakInitialized) {
+    return <div>Загрузка...</div>;
+  }
 
   return (
     <ThemeProvider theme={theme}>
