@@ -8,9 +8,8 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'My App',
-        short_name: 'MyApp',
-        description: 'My Awesome App',
+        name: 'Keycloak React',
+        short_name: 'KeycloakReact',
         theme_color: '#ffffff',
         icons: [
           {

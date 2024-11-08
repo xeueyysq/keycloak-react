@@ -8,3 +8,9 @@ services:
     command: start-dev
     ports:
       - '8080:8080'
+  web:
+    build: .
+    ports:
+      - '3000:80'
+    depends_on:
+      - keycloak
