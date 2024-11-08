@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { AppBar, Toolbar, IconButton, Menu, MenuItem } from '@mui/material';
-import { AccountCircle } from '@mui/icons-material';
-import { Brightness4, Brightness7 } from '@mui/icons-material';
+import { AccountCircle, Brightness4, Brightness7, Menu as MenuIcon } from '@mui/icons-material';
 import useThemeStore from '../store/themeStore';
 import keycloak from '../keycloak';
+import SideBar from './SideBar';
 
 function NavBar() {
     const darkMode = useThemeStore((state) => state.darkMode);
@@ -11,6 +11,8 @@ function NavBar() {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const isLoggedIn = keycloak.authenticated;
+
+    const [drawerOpen, setDrawerOpen] = useState(false);
 
     const handleLogin = () => {
         keycloak.login();
@@ -32,31 +34,43 @@ function NavBar() {
         setAnchorEl(null);
     };
 
+    const handleDrawerOpen = () => {
+        setDrawerOpen(true);
+    };
+
+    const handleDrawerClose = () => {
+        setDrawerOpen(false);
+    };
+
     return (
         <AppBar position="static">
-        <Toolbar>
-            <IconButton
-            edge="end"
-            color="inherit"
-            onClick={handleMenu}
-            >
-            <AccountCircle />
-            </IconButton>
-            <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-            >
-            {isLoggedIn ? (
-                <MenuItem onClick={handleLogout}>Выйти</MenuItem>
-            ) : (
-                <>
-                <MenuItem onClick={handleLogin}>Войти</MenuItem>
-                <MenuItem onClick={handleRegister}>Зарегистрироваться</MenuItem>
-                </>
-            )}
-            </Menu>
-        </Toolbar>
+            <Toolbar>
+                <IconButton edge="start" color="inherit" onClick={handleDrawerOpen}>
+                    <MenuIcon />
+                </IconButton>
+                <IconButton
+                    edge="end"
+                    color="inherit"
+                    onClick={handleMenu}
+                >
+                    <AccountCircle />
+                </IconButton>
+                <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                >
+                    {isLoggedIn ? (
+                        <MenuItem onClick={handleLogout}>Выйти</MenuItem>
+                    ) : (
+                        <>
+                            <MenuItem onClick={handleLogin}>Войти</MenuItem>
+                            <MenuItem onClick={handleRegister}>Зарегаться</MenuItem>
+                        </>
+                    )}
+                </Menu>
+            </Toolbar>
+            <SideBar open={drawerOpen} onClose={handleDrawerClose} />
         </AppBar>
     );
 }
