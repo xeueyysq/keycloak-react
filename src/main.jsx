@@ -1,9 +1,17 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.jsx'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import keycloak from './keycloak';
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+const rootElement = document.getElementById('root');
+const root = ReactDOM.createRoot(rootElement);
+
+keycloak.init({ onLoad: 'check-sso' }).then((authenticated) => {
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  );
+}).catch(error => {
+  console.error('Keycloak initialization error:', error);
+});

@@ -1,13 +1,22 @@
 version: '3.8'
+
 services:
   keycloak:
     image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    command: >
+      start-dev
+      --log-level=DEBUG
+      --log=console,file
+      --log-file=/opt/keycloak/data/log/keycloak.log
     environment:
-      - KC_HEALTH_ENABLED=true
-      - KC_METRICS_ENABLED=true
-      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
-      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
     ports:
       - '8080:8080'
-      - '8443:8443'
-    command: start-dev
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+    restart: unless-stopped
+
+volumes:
+  keycloak_data:
