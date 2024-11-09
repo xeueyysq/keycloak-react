@@ -127,14 +127,17 @@ function App() {
               display: 'flex',
               flexDirection: 'column',
               transition: 'all 0.3s ease-in-out',
-              marginLeft: {
+              height: '100vh',
+              position: 'absolute',
+              top: 0,
+              left: {
                 xs: 0,
-                [MOBILE_BREAKPOINT]: sidebarOpen ? `${DRAWER_WIDTH - 100}px` : 0
+                sm: sidebarOpen ? DRAWER_WIDTH : 0
               },
               width: {
                 xs: '100%',
-                [MOBILE_BREAKPOINT]: `calc(100% - ${sidebarOpen ? DRAWER_WIDTH - 100 : 0}px)`
-              },
+                sm: sidebarOpen ? `calc(100% - ${DRAWER_WIDTH}px)` : '100%'
+              }
             }}
           >
             <NavBar 
@@ -147,25 +150,19 @@ function App() {
               sx={{
                 display: 'flex',
                 width: '100%',
-                p: { xs: 1, sm: 2, md: 3 },
-                mt: 8,
-                justifyContent: 'center',
+                p: { xs: 0.5, sm: 1, md: 2 },
+                mt: 7,
+                justifyContent: 'flex-start',
               }}
             >
               <Box
                 sx={{
                   width: '100%',
-                  maxWidth: { xs: '100%', sm: '1000px' },
+                  maxWidth: '100%',
                   minHeight: 'calc(100vh - 80px)',
                   display: 'flex',
                   flexDirection: { xs: 'column', md: 'row' },
-                  gap: { xs: 1, sm: 2, md: 3 },
-                  mx: 'auto',
-                  transition: 'margin 0.3s ease-in-out',
-                  ml: {
-                    xs: 0,
-                    [MOBILE_BREAKPOINT]: sidebarOpen ? '-100px' : '-200px'
-                  },
+                  gap: { xs: 1, sm: 1.5, md: 2 },
                 }}
               >
                 <Routes>

@@ -21,12 +21,14 @@ import {
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import keycloak from '../keycloak';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const DRAWER_WIDTH = 240;
 
 function SideBar({ open, onClose }) {
     const navigate = useNavigate();
     const location = useLocation();
+    const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
     const menuItems = [
         { text: 'Главная', icon: <HomeIcon />, path: '/' },
@@ -55,33 +57,32 @@ function SideBar({ open, onClose }) {
 
     return (
         <Drawer
-        variant="permanent"
-        sx={{
-            width: DRAWER_WIDTH,
-            flexShrink: 0,
-            '& .MuiDrawer-paper': {
+            variant={isMobile ? "temporary" : "permanent"}
+            open={open}
+            onClose={onClose}
+            sx={{
                 width: DRAWER_WIDTH,
-                boxSizing: 'border-box',
-                backgroundColor: (theme) => 
-                    theme.palette.mode === 'dark' ? '#1a1a1a' : '#1a2035',
-                color: 'white',
-                borderRight: 'none',
-                transform: open ? 'translateX(0)' : `translateX(-${DRAWER_WIDTH}px)`,
-                transition: 'transform 0.3s ease-in-out',
-                height: '100%',
-                position: 'fixed',
-                zIndex: (theme) => theme.zIndex.drawer,
-                boxShadow: '4px 0 8px rgba(0, 0, 0, 0.4)',
-                '& .MuiTypography-root': {
-                    color: 'white'
-                }
-            },
-            '& + .content': {
-                marginLeft: open ? `${DRAWER_WIDTH}px` : 0,
-                transition: 'margin-left 0.3s ease-in-out',
-                width: `calc(100% - ${open ? DRAWER_WIDTH : 0}px)`,
-            }
-        }}
+                flexShrink: 0,
+                '& .MuiDrawer-paper': {
+                    width: DRAWER_WIDTH,
+                    boxSizing: 'border-box',
+                    backgroundColor: (theme) => 
+                        theme.palette.mode === 'dark' ? '#1a1a1a' : '#1a2035',
+                    color: 'white',
+                    borderRight: 'none',
+                    ...(isMobile ? {} : {
+                        transform: open ? 'translateX(0)' : `translateX(-${DRAWER_WIDTH}px)`,
+                    }),
+                    transition: 'transform 0.3s ease-in-out',
+                    height: '100%',
+                    position: 'fixed',
+                    zIndex: (theme) => theme.zIndex.drawer,
+                    boxShadow: '4px 0 8px rgba(0, 0, 0, 0.4)',
+                    '& .MuiTypography-root': {
+                        color: 'white'
+                    }
+                },
+            }}
         >
             <Box sx={{ 
                 overflow: 'auto',

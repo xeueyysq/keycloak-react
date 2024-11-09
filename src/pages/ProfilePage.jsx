@@ -58,20 +58,21 @@ function ProfilePage() {
     return (
         <Box sx={{
             display: 'flex',
-            justifyContent: 'flex-start',
-            alignItems: 'flex-start',
+            justifyContent: 'center',
+            alignItems: 'center',
             height: '100%',
             flex: 1,
-            pt: 2,
+            pt: { xs: 1, sm: 2 },
             mt: -2,
+            px: { xs: 1, sm: 2 },
         }}>
             <Paper elevation={3} sx={{ 
-                p: 2.5,
+                p: { xs: 1.5, sm: 2.5 },
                 backgroundColor: (theme) => theme.palette.mode === 'light' 
                     ? 'background.paper' 
                     : '#1a1a1a',
                 width: '100%',
-                maxWidth: '500px',
+                maxWidth: { xs: '100%', sm: '500px' },
             }}>
                 <Box display="flex" flexDirection="column" alignItems="center" mb={2}>
                     <Avatar
@@ -95,7 +96,14 @@ function ProfilePage() {
                     </Typography>
                 </Box>
 
-                <List sx={{ pt: 0 }}>
+                <List sx={{ 
+                    pt: 0,
+                    '& .MuiListItem-root': {
+                        flexDirection: { xs: 'column', sm: 'row' },
+                        alignItems: { xs: 'flex-start', sm: 'center' },
+                        gap: { xs: 1, sm: 2 }
+                    }
+                }}>
                     {profileItems.map((item, index) => (
                         <Box key={index}>
                             <ListItem sx={{ py: 1 }}>
