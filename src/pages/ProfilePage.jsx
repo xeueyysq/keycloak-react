@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, cloneElement } from 'react';
 import keycloak from '../keycloak';
 import {
   Container,
@@ -30,7 +30,7 @@ function ProfilePage() {
             setUserInfo(profile);
         })
         .catch(error => {
-            console.error('Ошибка загрузки профиля:', error);
+            console.error('Failed to load user profile:', error);
         });
     }, []);
 
@@ -52,20 +52,23 @@ function ProfilePage() {
 
     return (
         <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-        <Paper elevation={3} sx={{ p: 3, backgroundColor: 'white' }}>
+        <Paper elevation={3} sx={{ p: 3, backgroundColor: 'background.paper' }}>
             <Box display="flex" flexDirection="column" alignItems="center" mb={3}>
             <Avatar
                 sx={{
                 width: 100,
                 height: 100,
-                bgcolor: 'primary.main',
+                bgcolor: (theme) => theme.palette.mode === 'light' ? 'primary.main' : '#fff',
+                color: (theme) => theme.palette.mode === 'light' ? '#fff' : '#323232',
                 mb: 2,
-                fontSize: '2rem'
+                fontSize: '2.5rem'
                 }}
             >
                 {userInfo.firstName?.[0]}{userInfo.lastName?.[0]}
             </Avatar>
-            <Typography variant="h4" component="h1" gutterBottom>
+            <Typography variant="h4" component="h1" gutterBottom sx={{ 
+                color: (theme) => theme.palette.mode === 'light' ? '#283046' : '#fff'
+            }}>
                 Личный кабинет
             </Typography>
             </Box>
@@ -74,17 +77,25 @@ function ProfilePage() {
             {profileItems.map((item, index) => (
                 <Box key={index}>
                 <ListItem>
-                    <Box sx={{ mr: 2, color: 'primary.main', fontSize: '2rem' }}>
-                    {item.icon}
+                    <Box sx={{ mr: 2, color: (theme) => 
+                        theme.palette.mode === 'light' ? 'primary.main' : '#fff' }}>
+                    {cloneElement(item.icon, { sx: { fontSize: '2rem' } })}
                     </Box>
                     <ListItemText
                     primary={
-                        <Typography variant="body1" sx={{ fontWeight: 500, fontSize: '1.2rem' }}>
+                        <Typography variant="body1" sx={{ 
+                        fontWeight: 500, 
+                        fontSize: '1.4rem',
+                        color: (theme) => theme.palette.mode === 'light' ? '#283046' : '#fff'
+                        }}>
                         {item.primary}
                         </Typography>
                     }
                     secondary={
-                        <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+                        <Typography variant="body1" sx={{ 
+                        color: (theme) => theme.palette.mode === 'light' ? '#666666' : '#ccc',
+                        fontSize: '1.3rem'
+                        }}>
                         {item.secondary || 'Не указано'}
                         </Typography>
                     }
@@ -95,12 +106,17 @@ function ProfilePage() {
             ))}
             
             <ListItem>
-                <Box sx={{ mr: 2, color: 'primary.main', fontSize: '2rem' }}>
-                <VpnKey />
+                <Box sx={{ mr: 2, color: (theme) => 
+                    theme.palette.mode === 'light' ? 'primary.main' : '#fff' }}>
+                <VpnKey sx={{ fontSize: '2rem' }} />
                 </Box>
                 <ListItemText
                 primary={
-                    <Typography variant="body1" sx={{ fontWeight: 500, fontSize: '1.2rem' }}>
+                    <Typography variant="body1" sx={{ 
+                    fontWeight: 500, 
+                    fontSize: '1.4rem',
+                    color: (theme) => theme.palette.mode === 'light' ? '#283046' : '#fff'
+                    }}>
                     Роли
                     </Typography>
                 }
@@ -115,8 +131,8 @@ function ProfilePage() {
                         sx={{ 
                             mr: 1, 
                             mb: 1,
-                            fontSize: '1rem',
-                            height: '32px'
+                            fontSize: '1.2rem',
+                            height: '36px'
                         }}
                         />
                     ))}

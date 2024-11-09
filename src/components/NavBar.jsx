@@ -1,117 +1,67 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
-  AppBar,
-  Box,
-  Toolbar,
-  IconButton,
-  Menu,
-  MenuItem,
-  Typography,
-  Button,
+    AppBar,
+    Box,
+    Toolbar,
+    IconButton,
+    useTheme,
+    Tooltip,
 } from '@mui/material';
 import {
-  AccountCircle,
-  Login as LoginIcon,
-  Logout as LogoutIcon,
-  PersonAdd as RegisterIcon,
+    Menu as MenuIcon,
+    DarkMode as DarkModeIcon,
+    LightMode as LightModeIcon,
 } from '@mui/icons-material';
-import keycloak from '../keycloak';
 
-function NavBar() {
-    const [anchorEl, setAnchorEl] = useState(null);
-    const navigate = useNavigate();
+const DRAWER_WIDTH = 350;
 
-    const handleMenu = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const handleLogin = () => {
-        keycloak.login();
-        handleClose();
-    };
-
-    const handleLogout = () => {
-        keycloak.logout();
-        handleClose();
-    };
-
-    const handleRegister = () => {
-        keycloak.register();
-        handleClose();
-    };
-
-    const handleProfile = () => {
-        navigate('/profile');
-        handleClose();
-    };
+function NavBar({ onMenuClick, sidebarOpen, toggleTheme, isDarkMode }) {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
-        <AppBar position="static">
-        <Toolbar>
-            <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1, cursor: 'pointer' }}
-            onClick={() => navigate('/')}
-            >
-            Мое приложение
-            </Typography>
-
-            <Box>
+        <AppBar 
+            position="fixed" 
+            sx={{ 
+                zIndex: (theme) => theme.zIndex.drawer + 1,
+                backgroundColor: theme.palette.background.paper,
+                color: theme.palette.text.primary,
+                boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+                width: `calc(100% - ${sidebarOpen ? DRAWER_WIDTH : 0}px)`,
+                height: '80px',
+                ml: sidebarOpen ? `${DRAWER_WIDTH}px` : 0,
+                transition: 'margin-left 0.3s ease-in-out, width 0.3s ease-in-out'
+            }}
+        >
+            <Toolbar sx={{ height: '100%' }}>
                 <IconButton
-                    size="large"
-                    onClick={handleMenu}
+                    edge="start"
                     color="inherit"
-                    aria-label="account"
+                    aria-label="menu"
+                    onClick={onMenuClick}
+                    sx={{ 
+                        mr: 3,
+                        '& .MuiSvgIcon-root': {
+                            fontSize: '2.5rem',
+                        }
+                    }}
                 >
-                    <AccountCircle />
+                    <MenuIcon />
                 </IconButton>
-                <Menu
-                    id="menu-appbar"
-                    anchorEl={anchorEl}
-                    anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                    }}
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                >
-                    {keycloak.authenticated ? (
-                    [
-                        <MenuItem key="profile" onClick={handleProfile}>
-                        <AccountCircle sx={{ mr: 1 }} />
-                        Профиль
-                        </MenuItem>,
-                        <MenuItem key="logout" onClick={handleLogout}>
-                        <LogoutIcon sx={{ mr: 1 }} />
-                        Выйти
-                        </MenuItem>
-                    ]
-                    ) : (
-                    [
-                        <MenuItem key="login" onClick={handleLogin}>
-                        <LoginIcon sx={{ mr: 1 }} />
-                        Войти
-                        </MenuItem>,
-                        <MenuItem key="register" onClick={handleRegister}>
-                        <RegisterIcon sx={{ mr: 1 }} />
-                        Регистрация
-                        </MenuItem>
-                    ]
-                    )}
-                </Menu>
-            </Box>
-        </Toolbar>
+                <Box sx={{ flexGrow: 1 }} />
+                <Tooltip title={isDarkMode ? "Светлая тема" : "Темная тема"}>
+                    <IconButton
+                        color="inherit"
+                        onClick={toggleTheme}
+                        sx={{
+                            '& .MuiSvgIcon-root': {
+                                fontSize: '2rem',
+                            }
+                        }}
+                    >
+                        {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
+                    </IconButton>
+                </Tooltip>
+            </Toolbar>
         </AppBar>
     );
 }
