@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Box, Button, Typography, useTheme } from '@mui/material';
 import ProfilePage from '../ProfilePage';
 
-function Adminka() {
+function AdminPage() {
     const [showProfile, setShowProfile] = useState(false);
     const theme = useTheme();
 
@@ -43,4 +43,4 @@ function Adminka() {
     );
 }
 
-export default Adminka;
+export default AdminPage;

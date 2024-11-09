@@ -15,10 +15,11 @@ import HomePage from './pages/HomePage';
 import ProfilePage from './pages/ProfilePage';
 import DashboardPage from './pages/admin/DashboardPage';
 import UsersPage from './pages/admin/UsersPage';
-import Adminka from './pages/admin/Adminka';
+import AdminPage from './pages/admin/AdminPage';
 
 
 const DRAWER_WIDTH = 280;
+const MOBILE_BREAKPOINT = 'sm';
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -126,8 +127,14 @@ function App() {
               display: 'flex',
               flexDirection: 'column',
               transition: 'all 0.3s ease-in-out',
-              marginLeft: sidebarOpen ? `${DRAWER_WIDTH - 100}px` : 0,
-              width: `calc(100% - ${sidebarOpen ? DRAWER_WIDTH - 100 : 0}px)`,
+              marginLeft: {
+                xs: 0,
+                [MOBILE_BREAKPOINT]: sidebarOpen ? `${DRAWER_WIDTH - 100}px` : 0
+              },
+              width: {
+                xs: '100%',
+                [MOBILE_BREAKPOINT]: `calc(100% - ${sidebarOpen ? DRAWER_WIDTH - 100 : 0}px)`
+              },
             }}
           >
             <NavBar 
@@ -140,22 +147,25 @@ function App() {
               sx={{
                 display: 'flex',
                 width: '100%',
-                p: 3,
+                p: { xs: 1, sm: 2, md: 3 },
                 mt: 8,
-                justifyContent: 'flex-start',
+                justifyContent: 'center',
               }}
             >
               <Box
                 sx={{
                   width: '100%',
-                  maxWidth: '1000px',
+                  maxWidth: { xs: '100%', sm: '1000px' },
                   minHeight: 'calc(100vh - 80px)',
                   display: 'flex',
-                  gap: 3,
-                  mx: 0,
+                  flexDirection: { xs: 'column', md: 'row' },
+                  gap: { xs: 1, sm: 2, md: 3 },
+                  mx: 'auto',
                   transition: 'margin 0.3s ease-in-out',
-                  ml: sidebarOpen ? '-100px' : '-200px',
-                  mr: 'auto',
+                  ml: {
+                    xs: 0,
+                    [MOBILE_BREAKPOINT]: sidebarOpen ? '-100px' : '-200px'
+                  },
                 }}
               >
                 <Routes>
@@ -174,7 +184,7 @@ function App() {
                     path="/admin/adminka"
                     element={
                       keycloak.hasRealmRole('admin') ? (
-                        <Adminka />
+                        <AdminPage />
                       ) : (
                         <Navigate to="/" replace />
                       )
