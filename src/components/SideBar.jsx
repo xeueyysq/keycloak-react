@@ -17,11 +17,12 @@ import {
   Login as LoginIcon,
   Logout as LogoutIcon,
   PersonAdd as RegisterIcon,
+  Settings as SettingsIcon,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import keycloak from '../keycloak';
 
-const DRAWER_WIDTH = 350;
+const DRAWER_WIDTH = 240;
 
 function SideBar({ open, onClose }) {
     const navigate = useNavigate();
@@ -29,12 +30,13 @@ function SideBar({ open, onClose }) {
 
     const menuItems = [
         { text: 'Главная', icon: <HomeIcon />, path: '/' },
-        ...(keycloak.authenticated ? [
+        ...(keycloak.authenticated && !keycloak.hasRealmRole('admin') ? [
             { text: 'Личный кабинет', icon: <PersonIcon />, path: '/profile' }
         ] : [])
     ];
 
     const adminMenuItems = [
+        { text: 'Админка', icon: <SettingsIcon />, path: '/admin/adminka' },
         { text: 'Дашборд', icon: <DashboardIcon />, path: '/admin' },
         { text: 'Пользователи', icon: <GroupIcon />, path: '/admin/users' },
     ];
@@ -61,7 +63,7 @@ function SideBar({ open, onClose }) {
                 width: DRAWER_WIDTH,
                 boxSizing: 'border-box',
                 backgroundColor: (theme) => 
-                    theme.palette.mode === 'light' ? '#283046' : '#323232',
+                    theme.palette.mode === 'dark' ? '#1a1a1a' : '#1a2035',
                 color: 'white',
                 borderRight: 'none',
                 transform: open ? 'translateX(0)' : `translateX(-${DRAWER_WIDTH}px)`,
@@ -74,16 +76,26 @@ function SideBar({ open, onClose }) {
                     color: 'white'
                 }
             },
+            '& + .content': {
+                marginLeft: open ? `${DRAWER_WIDTH}px` : 0,
+                transition: 'margin-left 0.3s ease-in-out',
+                width: `calc(100% - ${open ? DRAWER_WIDTH : 0}px)`,
+            }
         }}
         >
-            <Box sx={{ overflow: 'auto' }}>
+            <Box sx={{ 
+                overflow: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%'
+            }}>
                 <Box sx={{ 
-                    p: 3,
+                    p: 2,
                     backgroundColor: (theme) => 
-                        theme.palette.mode === 'light' ? '#283046' : '#323232',
+                        theme.palette.mode === 'dark' ? '#1a1a1a' : '#1a2035',
                 }}>
                     <Typography
-                        variant="h4"
+                        variant="h1"
                         component="div"
                         sx={{ 
                             color: 'white',
@@ -93,6 +105,7 @@ function SideBar({ open, onClose }) {
                             msUserSelect: 'none',
                             fontFamily: "'Host Grotesk', sans-serif",
                             letterSpacing: '0.05em',
+                            fontSize: '1.5rem',
                         }}
                     >
                         Keycloak
@@ -106,7 +119,7 @@ function SideBar({ open, onClose }) {
                         onClick={() => navigate(item.path)}
                         selected={location.pathname === item.path}
                         sx={{
-                        py: 2,
+                        py: 1.5,
                         '&.Mui-selected': {
                             backgroundColor: 'rgba(255, 255, 255, 0.1)',
                             '&:hover': {
@@ -122,7 +135,7 @@ function SideBar({ open, onClose }) {
                         color: 'white', 
                         minWidth: 56,
                         '& .MuiSvgIcon-root': {
-                            fontSize: '2rem'
+                            fontSize: '1.2rem'
                         }
                         }}>
                         {item.icon}
@@ -130,7 +143,7 @@ function SideBar({ open, onClose }) {
                         <ListItemText 
                         primary={item.text} 
                         primaryTypographyProps={{ 
-                            fontSize: '1.4rem',
+                            fontSize: '1rem',
                             fontWeight: location.pathname === item.path ? 500 : 400
                         }} 
                         />
@@ -152,7 +165,7 @@ function SideBar({ open, onClose }) {
                             onClick={() => navigate(item.path)}
                             selected={location.pathname === item.path}
                             sx={{
-                            py: 2,
+                            py: 1.5,
                             '&.Mui-selected': {
                                 backgroundColor: 'rgba(255, 255, 255, 0.1)',
                                 '&:hover': {
@@ -168,7 +181,7 @@ function SideBar({ open, onClose }) {
                             color: 'white', 
                             minWidth: 56,
                             '& .MuiSvgIcon-root': {
-                                fontSize: '2rem'
+                                fontSize: '1.2rem'
                             }
                             }}>
                             {item.icon}
@@ -176,7 +189,7 @@ function SideBar({ open, onClose }) {
                             <ListItemText 
                             primary={item.text} 
                             primaryTypographyProps={{ 
-                                fontSize: '1.4rem',
+                                fontSize: '1rem',
                                 fontWeight: location.pathname === item.path ? 500 : 400
                             }} 
                             />
@@ -187,7 +200,7 @@ function SideBar({ open, onClose }) {
                 </>
                 )}
 
-                <Box sx={{ mt: 'auto', mb: 2 }}>
+                <Box sx={{ mt: 'auto' }}>
                     <Divider sx={{ 
                         borderColor: 'rgba(255, 255, 255, 0.12)',
                         my: 2
@@ -196,17 +209,20 @@ function SideBar({ open, onClose }) {
                         {!keycloak.authenticated ? (
                             <>
                                 <ListItem disablePadding>
-                                    <ListItemButton onClick={handleLogin} sx={{
-                                        py: 2,
-                                        '&:hover': {
-                                            backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                                        },
-                                    }}>
+                                    <ListItemButton 
+                                        onClick={handleLogin}
+                                        sx={{
+                                            py: 1.5,
+                                            '&:hover': {
+                                                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                            },
+                                        }}
+                                    >
                                         <ListItemIcon sx={{ 
                                             color: 'white', 
                                             minWidth: 56,
                                             '& .MuiSvgIcon-root': {
-                                                fontSize: '2rem'
+                                                fontSize: '1.2rem'
                                             }
                                         }}>
                                             <LoginIcon />
@@ -214,23 +230,26 @@ function SideBar({ open, onClose }) {
                                         <ListItemText 
                                             primary="Войти" 
                                             primaryTypographyProps={{ 
-                                                fontSize: '1.4rem'
+                                                fontSize: '1rem'
                                             }} 
                                         />
                                     </ListItemButton>
                                 </ListItem>
                                 <ListItem disablePadding>
-                                    <ListItemButton onClick={handleRegister} sx={{
-                                        py: 2,
-                                        '&:hover': {
-                                            backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                                        },
-                                    }}>
+                                    <ListItemButton 
+                                        onClick={handleRegister}
+                                        sx={{
+                                            py: 1.5,
+                                            '&:hover': {
+                                                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                            },
+                                        }}
+                                    >
                                         <ListItemIcon sx={{ 
                                             color: 'white', 
                                             minWidth: 56,
                                             '& .MuiSvgIcon-root': {
-                                                fontSize: '2rem'
+                                                fontSize: '1.2rem'
                                             }
                                         }}>
                                             <RegisterIcon />
@@ -238,7 +257,7 @@ function SideBar({ open, onClose }) {
                                         <ListItemText 
                                             primary="Регистрация" 
                                             primaryTypographyProps={{ 
-                                                fontSize: '1.4rem'
+                                                fontSize: '1rem'
                                             }} 
                                         />
                                     </ListItemButton>
@@ -246,17 +265,20 @@ function SideBar({ open, onClose }) {
                             </>
                         ) : (
                             <ListItem disablePadding>
-                                <ListItemButton onClick={handleLogout} sx={{
-                                    py: 2,
-                                    '&:hover': {
-                                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                                    },
-                                }}>
+                                <ListItemButton 
+                                    onClick={handleLogout}
+                                    sx={{
+                                        py: 1.5,
+                                        '&:hover': {
+                                            backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                                        },
+                                    }}
+                                >
                                     <ListItemIcon sx={{ 
                                         color: 'white', 
                                         minWidth: 56,
                                         '& .MuiSvgIcon-root': {
-                                            fontSize: '2rem'
+                                            fontSize: '1.2rem'
                                         }
                                     }}>
                                         <LogoutIcon />
@@ -264,7 +286,7 @@ function SideBar({ open, onClose }) {
                                     <ListItemText 
                                         primary="Выйти" 
                                         primaryTypographyProps={{ 
-                                            fontSize: '1.4rem'
+                                            fontSize: '1rem'
                                         }} 
                                     />
                                 </ListItemButton>

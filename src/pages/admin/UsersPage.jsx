@@ -1,8 +1,12 @@
+import { Typography, Box } from '@mui/material';
+
 function UsersPage() {
   return (
-    <div>
-      <h1>Список пользователей</h1>
-    </div>
+    <Box>
+      <Typography variant="h3" component="h1" gutterBottom>
+        Список пользователей
+      </Typography>
+    </Box>
   );
 }
 

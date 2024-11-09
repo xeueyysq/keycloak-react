@@ -1,7 +1,6 @@
 import { useEffect, useState, cloneElement } from 'react';
 import keycloak from '../keycloak';
 import {
-  Container,
   Paper,
   Typography,
   List,
@@ -36,9 +35,15 @@ function ProfilePage() {
 
     if (!userInfo) {
         return (
-        <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-            <CircularProgress />
-        </Box>
+            <Box sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100%',
+                flex: 1
+            }}>
+                <CircularProgress />
+            </Box>
         );
     }
 
@@ -51,98 +56,115 @@ function ProfilePage() {
     ];
 
     return (
-        <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-        <Paper elevation={3} sx={{ p: 3, backgroundColor: 'background.paper' }}>
-            <Box display="flex" flexDirection="column" alignItems="center" mb={3}>
-            <Avatar
-                sx={{
-                width: 100,
-                height: 100,
-                bgcolor: (theme) => theme.palette.mode === 'light' ? 'primary.main' : '#fff',
-                color: (theme) => theme.palette.mode === 'light' ? '#fff' : '#323232',
-                mb: 2,
-                fontSize: '2.5rem'
-                }}
-            >
-                {userInfo.firstName?.[0]}{userInfo.lastName?.[0]}
-            </Avatar>
-            <Typography variant="h4" component="h1" gutterBottom sx={{ 
-                color: (theme) => theme.palette.mode === 'light' ? '#283046' : '#fff'
+        <Box sx={{
+            display: 'flex',
+            justifyContent: 'flex-start',
+            alignItems: 'flex-start',
+            height: '100%',
+            flex: 1,
+            pt: 2,
+            mt: -2,
+        }}>
+            <Paper elevation={3} sx={{ 
+                p: 2.5,
+                backgroundColor: (theme) => theme.palette.mode === 'light' 
+                    ? 'background.paper' 
+                    : '#1a1a1a',
+                width: '100%',
+                maxWidth: '500px',
             }}>
-                Личный кабинет
-            </Typography>
-            </Box>
-
-            <List>
-            {profileItems.map((item, index) => (
-                <Box key={index}>
-                <ListItem>
-                    <Box sx={{ mr: 2, color: (theme) => 
-                        theme.palette.mode === 'light' ? 'primary.main' : '#fff' }}>
-                    {cloneElement(item.icon, { sx: { fontSize: '2rem' } })}
-                    </Box>
-                    <ListItemText
-                    primary={
-                        <Typography variant="body1" sx={{ 
-                        fontWeight: 500, 
-                        fontSize: '1.4rem',
-                        color: (theme) => theme.palette.mode === 'light' ? '#283046' : '#fff'
-                        }}>
-                        {item.primary}
-                        </Typography>
-                    }
-                    secondary={
-                        <Typography variant="body1" sx={{ 
-                        color: (theme) => theme.palette.mode === 'light' ? '#666666' : '#ccc',
-                        fontSize: '1.3rem'
-                        }}>
-                        {item.secondary || 'Не указано'}
-                        </Typography>
-                    }
-                    />
-                </ListItem>
-                {index < profileItems.length - 1 && <Divider />}
-                </Box>
-            ))}
-            
-            <ListItem>
-                <Box sx={{ mr: 2, color: (theme) => 
-                    theme.palette.mode === 'light' ? 'primary.main' : '#fff' }}>
-                <VpnKey sx={{ fontSize: '2rem' }} />
-                </Box>
-                <ListItemText
-                primary={
-                    <Typography variant="body1" sx={{ 
-                    fontWeight: 500, 
-                    fontSize: '1.4rem',
-                    color: (theme) => theme.palette.mode === 'light' ? '#283046' : '#fff'
-                    }}>
-                    Роли
-                    </Typography>
-                }
-                secondary={
-                    <Box sx={{ mt: 1 }}>
-                    {keycloak.realmAccess?.roles.map((role) => (
-                        <Chip
-                        key={role}
-                        label={role}
-                        color={role === 'admin' ? 'error' : 'primary'}
-                        size="medium"
-                        sx={{ 
-                            mr: 1, 
-                            mb: 1,
-                            fontSize: '1.2rem',
-                            height: '36px'
+                <Box display="flex" flexDirection="column" alignItems="center" mb={2}>
+                    <Avatar
+                        sx={{
+                            width: 70,
+                            height: 70,
+                            bgcolor: (theme) => theme.palette.mode === 'light' ? 'primary.main' : '#fff',
+                            color: (theme) => theme.palette.mode === 'light' ? '#fff' : '#323232',
+                            mb: 1.5,
+                            fontSize: '1.2rem'
                         }}
-                        />
+                    >
+                        {userInfo.firstName?.[0]}{userInfo.lastName?.[0]}
+                    </Avatar>
+                    <Typography variant="h5" component="h1" gutterBottom sx={{ 
+                        color: (theme) => theme.palette.mode === 'light' ? '#283046' : '#fff',
+                        fontSize: '1.2rem',
+                        mb: 1
+                    }}>
+                        Личный кабинет
+                    </Typography>
+                </Box>
+
+                <List sx={{ pt: 0 }}>
+                    {profileItems.map((item, index) => (
+                        <Box key={index}>
+                            <ListItem sx={{ py: 1 }}>
+                                <Box sx={{ mr: 2, color: (theme) => 
+                                    theme.palette.mode === 'light' ? 'primary.main' : '#fff' }}>
+                                    {cloneElement(item.icon, { sx: { fontSize: '1.2rem' } })}
+                                </Box>
+                                <ListItemText
+                                    primary={
+                                        <Typography variant="body1" sx={{ 
+                                            fontWeight: 500, 
+                                            fontSize: '0.9rem',
+                                            color: (theme) => theme.palette.mode === 'light' ? '#283046' : '#fff'
+                                        }}>
+                                            {item.primary}
+                                        </Typography>
+                                    }
+                                    secondary={
+                                        <Typography variant="body2" sx={{ 
+                                            color: (theme) => theme.palette.mode === 'light' ? '#666666' : '#ccc',
+                                            fontSize: '0.8rem'
+                                        }}>
+                                            {item.secondary || 'Не указано'}
+                                        </Typography>
+                                    }
+                                />
+                            </ListItem>
+                            {index < profileItems.length - 1 && <Divider />}
+                        </Box>
                     ))}
-                    </Box>
-                }
-                />
-            </ListItem>
-            </List>
-        </Paper>
-        </Container>
+                    
+                    <ListItem sx={{ py: 1 }}>
+                        <Box sx={{ mr: 2, color: (theme) => 
+                            theme.palette.mode === 'light' ? 'primary.main' : '#fff' }}>
+                            <VpnKey sx={{ fontSize: '1.2rem' }} />
+                        </Box>
+                        <ListItemText
+                            primary={
+                                <Typography variant="body1" sx={{ 
+                                    fontWeight: 500, 
+                                    fontSize: '0.9rem',
+                                    color: (theme) => theme.palette.mode === 'light' ? '#283046' : '#fff'
+                                }}>
+                                    Роли
+                                </Typography>
+                            }
+                            secondary={
+                                <Box sx={{ mt: 0.5 }}>
+                                    {keycloak.realmAccess?.roles.map((role) => (
+                                        <Chip
+                                            key={role}
+                                            label={role}
+                                            color={role === 'admin' ? 'error' : 'primary'}
+                                            size="small"
+                                            sx={{ 
+                                                mr: 0.5, 
+                                                mb: 0.5,
+                                                fontSize: '0.7rem',
+                                                height: '20px'
+                                            }}
+                                        />
+                                    ))}
+                                </Box>
+                            }
+                        />
+                    </ListItem>
+                </List>
+            </Paper>
+        </Box>
     );
 }
 

@@ -1,8 +1,12 @@
+import { Typography, Box } from '@mui/material';
+
 function DashboardPage() {
   return (
-    <div>
-      <h1>Дашборд</h1>
-    </div>
+    <Box>
+      <Typography variant="h3" component="h1" gutterBottom>
+        Дашборд
+      </Typography>
+    </Box>
   );
 }
 

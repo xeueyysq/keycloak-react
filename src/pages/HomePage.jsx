@@ -1,9 +1,12 @@
+import { Typography, Box } from '@mui/material';
 
 function HomePage() {
     return (
-        <div>
-        <h1>Добро пожаловать на главную страницу</h1>
-        </div>
+        <Box>
+            <Typography variant="h3" component="h1" gutterBottom>
+                Добро пожаловать на главную страницу
+            </Typography>
+        </Box>
     );
 }
 
