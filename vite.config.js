@@ -45,8 +45,8 @@ export default defineConfig({
         ]
       },
       manifest: {
-        name: 'Keycloak React',
-        short_name: 'KeycloakReact',
+        name: 'Keycloak',
+        short_name: 'Keycloak',
         description: 'Keycloak React Application',
         theme_color: '#ffffff',
         background_color: '#ffffff',

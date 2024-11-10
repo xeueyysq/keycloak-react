@@ -10,7 +10,8 @@ import {
   Avatar,
   Box,
   Chip,
-  CircularProgress
+  CircularProgress,
+  Button
 } from '@mui/material';
 import {
   Person,
@@ -54,6 +55,10 @@ function ProfilePage() {
         { icon: <Person />, primary: 'Имя', secondary: userInfo.firstName },
         { icon: <Person />, primary: 'Фамилия', secondary: userInfo.lastName },
     ];
+
+    const handleAccountManagement = () => {
+        keycloak.accountManagement();
+    };
 
     return (
         <Box sx={{
@@ -156,7 +161,7 @@ function ProfilePage() {
                                         <Chip
                                             key={role}
                                             label={role}
-                                            color={role === 'admin' ? 'error' : 'primary'}
+                                            color={role === 'secret-admin' ? 'error' : 'primary'}
                                             size="small"
                                             sx={{ 
                                                 mr: 0.5, 
@@ -170,6 +175,26 @@ function ProfilePage() {
                             }
                         />
                     </ListItem>
+
+                    {!keycloak.hasRealmRole('secret-admin') && (
+                        <ListItem sx={{ py: 1 }}>
+                            <Typography
+                                component="a"
+                                onClick={handleAccountManagement}
+                                sx={{
+                                    color: (theme) => theme.palette.mode === 'light' ? 'primary.main' : '#4fc3f7',
+                                    textDecoration: 'none',
+                                    cursor: 'pointer',
+                                    fontSize: '0.9rem',
+                                    '&:hover': {
+                                        textDecoration: 'underline'
+                                    }
+                                }}
+                            >
+                                Перейти в личный кабинет Keycloak
+                            </Typography>
+                        </ListItem>
+                    )}
                 </List>
             </Paper>
         </Box>

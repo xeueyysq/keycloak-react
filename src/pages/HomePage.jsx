@@ -1,6 +1,8 @@
-import { Typography, Box } from '@mui/material';
+import { Typography, Box, useTheme } from '@mui/material';
 
 function HomePage() {
+    const theme = useTheme();
+
     return (
         <Box sx={{
             width: '100%',
@@ -19,7 +21,7 @@ function HomePage() {
                     maxWidth: '100%'
                 }}
             >
-                Добро пожаловать на главную страницу
+                Добро пожаловать на {theme.palette.mode === 'light' ? 'светлую' : 'темную'} тему
             </Typography>
         </Box>
     );

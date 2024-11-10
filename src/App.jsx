@@ -168,9 +168,9 @@ function App() {
                 <Routes>
                   <Route path="/" element={<HomePage />} />
                   <Route
-                    path="/admin"
+                    path="/admin/dashboard"
                     element={
-                      keycloak.hasRealmRole('admin') ? (
+                      keycloak.hasRealmRole('secret-admin') ? (
                         <DashboardPage />
                       ) : (
                         <Navigate to="/" replace />
@@ -178,9 +178,9 @@ function App() {
                     }
                   />
                   <Route
-                    path="/admin/adminka"
+                    path="/admin"
                     element={
-                      keycloak.hasRealmRole('admin') ? (
+                      keycloak.hasRealmRole('secret-admin') ? (
                         <AdminPage />
                       ) : (
                         <Navigate to="/" replace />
@@ -190,7 +190,7 @@ function App() {
                   <Route
                     path="/admin/users"
                     element={
-                      keycloak.hasRealmRole('admin') ? (
+                      keycloak.hasRealmRole('secret-admin') ? (
                         <UsersPage />
                       ) : (
                         <Navigate to="/" replace />
