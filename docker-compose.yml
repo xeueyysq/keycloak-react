@@ -3,50 +3,47 @@ version: '3.8'
 services:
   keycloak:
     image: quay.io/keycloak/keycloak:latest
-    command: ${KC_COMMAND:-start-dev}
+    container_name: keycloak
+    command: start-dev --import-realm --hostname=localhost
     environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
-      KC_PROXY: ${KC_PROXY:-edge}
-      KC_HOSTNAME_STRICT: ${KC_HOSTNAME_STRICT:-false}
-      KC_HOSTNAME_STRICT_HTTPS: ${KC_HOSTNAME_STRICT_HTTPS:-false}
-    expose:
-      - 8080
+      KC_BOOTSTRAP_ADMIN_USER: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_PROXY: ${KC_PROXY}
+      KC_HOSTNAME_STRICT: ${KC_HOSTNAME_STRICT}
+      KC_HOSTNAME_STRICT_HTTPS: ${KC_HOSTNAME_STRICT_HTTPS}
+      KC_HEALTH_ENABLED: "true"
+      KC_METRICS_ENABLED: "true"
+    ports:
+      - '8080:8080'
     volumes:
       - keycloak_data:/opt/keycloak/data
+      - ./tmp:/opt/keycloak/data/import:ro
     restart: unless-stopped
     networks:
-      - dokploy-network
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.keycloak.rule=Host(`auth.130.193.46.97`)"
-      - "traefik.http.routers.keycloak.entrypoints=websecure"
-      - "traefik.http.routers.keycloak.tls.certResolver=letsencrypt"
-      - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
+      - app-network
 
   frontend:
     build:
       context: .
-      args:
-        - VITE_KC_URL=${VITE_KC_URL}
-        - VITE_APP_URL=${VITE_APP_URL}
-    expose:
-      - 80
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - '5173:5173'
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+    environment:
+      - VITE_KC_URL=http://localhost:8080
+      - VITE_APP_URL=http://localhost:5173
     depends_on:
       - keycloak
     restart: unless-stopped
     networks:
-      - dokploy-network
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`130.193.46.97`)"
-      - "traefik.http.routers.frontend.entrypoints=websecure"
-      - "traefik.http.routers.frontend.tls.certResolver=letsencrypt"
-      - "traefik.http.services.frontend.loadbalancer.server.port=80"
+      - app-network
 
 networks:
-  dokploy-network:
-    external: true
+  app-network:
+    driver: bridge
 
 volumes:
   keycloak_data:

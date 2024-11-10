@@ -11,7 +11,8 @@ function AdminPage() {
     };
 
     const handleAdminConsole = () => {
-        window.location.href = `${keycloak.authServerUrl}admin/${keycloak.realm}/console/`;
+        const baseUrl = import.meta.env.VITE_KC_URL || 'http://localhost:8080';
+        window.location.href = `${baseUrl}/admin/sofa/console`;
     };
 
     const hasSecretAdminRole = keycloak.hasRealmRole('secret-admin');
