@@ -1,10 +1,52 @@
 version: '3.8'
+
 services:
   keycloak:
     image: quay.io/keycloak/keycloak:latest
+    command: ${KC_COMMAND:-start-dev}
     environment:
-      - KEYCLOAK_ADMIN=admin
-      - KEYCLOAK_ADMIN_PASSWORD=admin
-    command: start-dev
-    ports:
-      - '8080:8080'
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_PROXY: ${KC_PROXY:-edge}
+      KC_HOSTNAME_STRICT: ${KC_HOSTNAME_STRICT:-false}
+      KC_HOSTNAME_STRICT_HTTPS: ${KC_HOSTNAME_STRICT_HTTPS:-false}
+    expose:
+      - 8080
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+    restart: unless-stopped
+    networks:
+      - dokploy-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.keycloak.rule=Host(`auth.130.193.46.97`)"
+      - "traefik.http.routers.keycloak.entrypoints=websecure"
+      - "traefik.http.routers.keycloak.tls.certResolver=letsencrypt"
+      - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
+
+  frontend:
+    build:
+      context: .
+      args:
+        - VITE_KC_URL=${VITE_KC_URL}
+        - VITE_APP_URL=${VITE_APP_URL}
+    expose:
+      - 80
+    depends_on:
+      - keycloak
+    restart: unless-stopped
+    networks:
+      - dokploy-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`130.193.46.97`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls.certResolver=letsencrypt"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
+
+networks:
+  dokploy-network:
+    external: true
+
+volumes:
+  keycloak_data:
