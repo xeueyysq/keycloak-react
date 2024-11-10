@@ -11,7 +11,7 @@ function AdminPage() {
     };
 
     const handleAdminConsole = () => {
-        window.location.href = `${keycloak.authServerUrl}/admin/${keycloak.realm}/console/`;
+        window.location.href = `${keycloak.authServerUrl}admin/${keycloak.realm}/console/`;
     };
 
     const hasSecretAdminRole = keycloak.hasRealmRole('secret-admin');
@@ -43,6 +43,22 @@ function AdminPage() {
                 flexDirection: { xs: 'column', sm: 'row' },
                 gap: 2,
             }}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleAccountManagement}
+                    sx={{
+                        fontSize: { xs: '0.8rem', sm: '0.9rem' },
+                        py: { xs: 0.5, sm: 1 },
+                        px: { xs: 1.5, sm: 2 },
+                        backgroundColor: theme.palette.mode === 'dark' ? '#1a1a1a' : undefined,
+                        '&:hover': {
+                            backgroundColor: theme.palette.mode === 'dark' ? '#333' : undefined,
+                        }
+                    }}
+                >
+                    Личный кабинет Keycloak
+                </Button>
                 {hasSecretAdminRole && (
                     <Button
                         variant="contained"
@@ -61,23 +77,6 @@ function AdminPage() {
                         Консоль
                     </Button>
                 )}
-                
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleAccountManagement}
-                    sx={{
-                        fontSize: { xs: '0.8rem', sm: '0.9rem' },
-                        py: { xs: 0.5, sm: 1 },
-                        px: { xs: 1.5, sm: 2 },
-                        backgroundColor: theme.palette.mode === 'dark' ? '#1a1a1a' : undefined,
-                        '&:hover': {
-                            backgroundColor: theme.palette.mode === 'dark' ? '#333' : undefined,
-                        }
-                    }}
-                >
-                    Личный кабинет Keycloak
-                </Button>
             </Box>
         </Box>
     );

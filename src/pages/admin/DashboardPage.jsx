@@ -19,7 +19,7 @@ function DashboardPage() {
                     maxWidth: '100%'
                 }}
             >
-                Дашборд
+                Дашборд со статистикой приложения
             </Typography>
         </Box>
     );

@@ -48,7 +48,7 @@ function SideBar({ open, onClose }) {
     const adminMenuItems = [
         { text: 'Админка', icon: <SettingsIcon />, path: '/admin' },
         { text: 'Личный кабинет', icon: <PersonIcon />, path: '/profile' },
-        { text: 'Дашборд', icon: <DashboardIcon />, path: '/admin/dashboard' },
+        { text: 'Статистика', icon: <DashboardIcon />, path: '/admin/dashboard' },
         { text: 'Пользователи', icon: <GroupIcon />, onClick: handleUsersClick },
     ];
 
