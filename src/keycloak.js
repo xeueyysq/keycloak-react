@@ -13,5 +13,7 @@ keycloak.onTokenExpired = () => {
         keycloak.logout();
     });
 };
+console.log('VITE_KC_URL:', import.meta.env.VITE_KC_URL);
+console.log('VITE_APP_URL:', import.meta.env.VITE_APP_URL);
 
 export default keycloak;

@@ -4,7 +4,7 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     container_name: keycloak
-    command: start-dev --import-realm --hostname=localhost
+    command: start-dev --import-realm --hostname=localhost --hostname-strict=false
     environment:
       KC_BOOTSTRAP_ADMIN_USER: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
