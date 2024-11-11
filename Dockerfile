@@ -6,10 +6,9 @@ RUN npm install
 
 COPY . .
 
-ENV VITE_KC_URL=http://localhost:8080
-ENV VITE_APP_URL=http://localhost:5173
+ENV VITE_KC_URL=${VITE_KC_URL}
+ENV VITE_APP_URL=${VITE_APP_URL}
 
+EXPOSE 3000
 
-EXPOSE 5173
-
-CMD ["npm", "run", "dev", "--", "--host"]
+CMD ["npm", "run", "dev", "--", "--host", "--port", "3000"]
