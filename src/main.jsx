@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import keycloak from './keycloak';
@@ -18,7 +17,13 @@ const updateSW = registerSW({
   },
 });
 
-keycloak.init({ onLoad: 'check-sso' }).then(() => {
+keycloak.init({
+  onLoad: 'check-sso',
+  checkLoginIframe: false,
+  enableLogging: import.meta.env.DEV,
+  silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
+}).then((authenticated) => {
+  console.log('Keycloak initialized, authenticated:', authenticated);
   root.render(
     <React.StrictMode>
       <App />

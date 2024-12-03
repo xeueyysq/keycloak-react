@@ -4,20 +4,31 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     container_name: keycloak
-    command: start-dev --import-realm --hostname=localhost --hostname-strict=false
+    command:
+      - start
+      - '--import-realm'
     environment:
-      KC_BOOTSTRAP_ADMIN_USER: admin
+      KC_HOSTNAME: 130.193.57.13
+      KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/conf/cert.pem
+      KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/conf/key.pem
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
-      KC_PROXY: ${KC_PROXY}
-      KC_HOSTNAME_STRICT: ${KC_HOSTNAME_STRICT}
-      KC_HOSTNAME_STRICT_HTTPS: ${KC_HOSTNAME_STRICT_HTTPS}
+      KC_DB: dev-file
       KC_HEALTH_ENABLED: "true"
       KC_METRICS_ENABLED: "true"
+
+      KC_SPI_CONTENTECURITYPOLICY_FRAME_ANCESTORS: "'self' http://130.193.57.13:5173 https://130.193.57.13:5173"
+
+      KC_HOSTNAME_STRICT: "false"
+      KC_HOSTNAME_STRICT_BACKCHANNEL: "false"
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+      KC_TRUSTED_HOSTS: "130.193.57.13"
     ports:
-      - '8080:8080'
+      - '8443:8443'
     volumes:
       - keycloak_data:/opt/keycloak/data
       - ./tmp:/opt/keycloak/data/import:ro
+      - ./certs:/opt/keycloak/conf
     restart: unless-stopped
     networks:
       - app-network
@@ -32,9 +43,11 @@ services:
     volumes:
       - ./src:/app/src
       - ./public:/app/public
+      - ./certs:/app/certs
+      - ./vite.config.js:/app/vite.config.js
     environment:
-      - VITE_KC_URL=http://localhost:8080
-      - VITE_APP_URL=http://localhost:5173
+      - VITE_KC_URL=https://130.193.57.13:8443
+      - VITE_APP_URL=https://130.193.57.13:5173
     depends_on:
       - keycloak
     restart: unless-stopped
