@@ -38,7 +38,8 @@ function SideBar({ open, onClose }) {
     ];
 
     const handleUsersClick = () => {
-        window.location.href = `http://localhost:8080/admin/sofa/console/#/sofa/users`;
+        const baseUrl = import.meta.env.VITE_KC_URL || 'http://localhost:8080';
+        window.location.href = `${baseUrl}/admin/sofa/console/#/sofa/users`;
     };
 
     const handleAccountManagement = () => {
