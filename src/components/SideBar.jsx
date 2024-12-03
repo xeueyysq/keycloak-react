@@ -18,6 +18,10 @@ import {
   Logout as LogoutIcon,
   PersonAdd as RegisterIcon,
   Settings as SettingsIcon,
+  Flag as FlagIcon,
+  AccountTree as AccountTreeIcon,
+  Code as CodeIcon,
+  Description as DescriptionIcon,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import keycloak from '../keycloak';
@@ -32,6 +36,10 @@ function SideBar({ open, onClose }) {
 
     const menuItems = [
         { text: 'Главная', icon: <HomeIcon />, path: '/' },
+        { text: 'Цели и задачи', icon: <FlagIcon />, path: '/goals' },
+        { text: 'Pipeline', icon: <AccountTreeIcon />, path: '/pipeline' },
+        { text: 'Стек технологий', icon: <CodeIcon />, path: '/tech-stack' },
+        { text: 'Описание работы', icon: <DescriptionIcon />, path: '/description' },
         ...(keycloak.authenticated && !keycloak.hasRealmRole('secret-admin') ? [
             { text: 'Личный кабинет', icon: <PersonIcon />, path: '/profile' }
         ] : [])

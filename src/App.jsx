@@ -16,9 +16,13 @@ import ProfilePage from './pages/ProfilePage';
 import DashboardPage from './pages/admin/DashboardPage';
 import UsersPage from './pages/admin/UsersPage';
 import AdminPage from './pages/admin/AdminPage';
+import GoalsPage from './pages/GoalsPage';
+import PipelinePage from './pages/PipelinePage';
+import TechStackPage from './pages/TechStackPage';
+import DescriptionPage from './pages/DescriptionPage';
 
 
-const DRAWER_WIDTH = 280;
+const DRAWER_WIDTH = 240;
 const MOBILE_BREAKPOINT = 'sm';
 
 function App() {
@@ -128,7 +132,7 @@ function App() {
               flexDirection: 'column',
               transition: 'all 0.3s ease-in-out',
               height: '100vh',
-              position: 'absolute',
+              position: 'fixed',
               top: 0,
               left: {
                 xs: 0,
@@ -137,7 +141,8 @@ function App() {
               width: {
                 xs: '100%',
                 sm: sidebarOpen ? `calc(100% - ${DRAWER_WIDTH}px)` : '100%'
-              }
+              },
+              pl: 0
             }}
           >
             <NavBar 
@@ -148,67 +153,59 @@ function App() {
             />
             <Box
               sx={{
-                display: 'flex',
                 width: '100%',
-                p: { xs: 0.5, sm: 1, md: 2 },
-                mt: 7,
-                justifyContent: 'flex-start',
+                mt: '64px',
+                minHeight: 'calc(100vh - 64px)',
+                overflow: 'auto'
               }}
             >
-              <Box
-                sx={{
-                  width: '100%',
-                  maxWidth: '100%',
-                  minHeight: 'calc(100vh - 80px)',
-                  display: 'flex',
-                  flexDirection: { xs: 'column', md: 'row' },
-                  gap: { xs: 1, sm: 1.5, md: 2 },
-                }}
-              >
-                <Routes>
-                  <Route path="/" element={<HomePage />} />
-                  <Route
-                    path="/admin/dashboard"
-                    element={
-                      keycloak.hasRealmRole('secret-admin') ? (
-                        <DashboardPage />
-                      ) : (
-                        <Navigate to="/" replace />
-                      )
-                    }
-                  />
-                  <Route
-                    path="/admin"
-                    element={
-                      keycloak.hasRealmRole('secret-admin') ? (
-                        <AdminPage />
-                      ) : (
-                        <Navigate to="/" replace />
-                      )
-                    }
-                  />
-                  <Route
-                    path="/admin/users"
-                    element={
-                      keycloak.hasRealmRole('secret-admin') ? (
-                        <UsersPage />
-                      ) : (
-                        <Navigate to="/" replace />
-                      )
-                    }
-                  />
-                  <Route
-                    path="/profile"
-                    element={
-                      keycloak.authenticated ? (
-                        <ProfilePage />
-                      ) : (
-                        <Navigate to="/" replace />
-                      )
-                    }
-                  />
-                </Routes>
-              </Box>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/goals" element={<GoalsPage />} />
+                <Route path="/pipeline" element={<PipelinePage />} />
+                <Route path="/tech-stack" element={<TechStackPage />} />
+                <Route path="/description" element={<DescriptionPage />} />
+                <Route
+                  path="/admin/dashboard"
+                  element={
+                    keycloak.hasRealmRole('secret-admin') ? (
+                      <DashboardPage />
+                    ) : (
+                      <Navigate to="/" replace />
+                    )
+                  }
+                />
+                <Route
+                  path="/admin"
+                  element={
+                    keycloak.hasRealmRole('secret-admin') ? (
+                      <AdminPage />
+                    ) : (
+                      <Navigate to="/" replace />
+                    )
+                  }
+                />
+                <Route
+                  path="/admin/users"
+                  element={
+                    keycloak.hasRealmRole('secret-admin') ? (
+                      <UsersPage />
+                    ) : (
+                      <Navigate to="/" replace />
+                    )
+                  }
+                />
+                <Route
+                  path="/profile"
+                  element={
+                    keycloak.authenticated ? (
+                      <ProfilePage />
+                    ) : (
+                      <Navigate to="/" replace />
+                    )
+                  }
+                />
+              </Routes>
             </Box>
           </Box>
         </Box>
